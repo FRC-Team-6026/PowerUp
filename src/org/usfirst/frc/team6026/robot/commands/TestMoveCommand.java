@@ -4,10 +4,11 @@ import org.usfirst.frc.team6026.robot.Robot;
 import org.usfirst.frc.team6026.robot.SimplePID;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TestMoveCommand extends Command {
 
-	private SimplePID m_MovePID = new SimplePID(0.0025, 0.0001, 0, 0, 1000);	// move PID
+	private SimplePID m_MovePID = new SimplePID(0.003, 0, 0, 0, 0);	// move PID
 	
 	public TestMoveCommand() {
 		requires(Robot.kGyroSubsystem);
@@ -23,8 +24,11 @@ public class TestMoveCommand extends Command {
 		
 		// Move 1000 Counts (1000mm)
 		double position = (Robot.kDriveTrainSubsystem.getLeftMotorPosition() + Robot.kDriveTrainSubsystem.getRightMotorPosition() ) / 2;
-		double target = 1000;
-		double output = m_MovePID.update(position, target);
+		double target = 2616;
+		double output = - m_MovePID.update(position, target);
+		
+		SmartDashboard.putNumber("position", position);
+		SmartDashboard.putNumber("output", output);
 		
 		// TODO: Use Gyro To Maintain Heading
 		

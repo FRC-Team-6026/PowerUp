@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Test360Command extends Command {
 
 	//private SimplePID m_RotatePID = new SimplePID(0.003, 0.0003, 0, 0, 0.1);  // best so far
-	private SimplePID m_RotatePID = new SimplePID(0.0025, 0.0001, 0, 0, 1000);	// rotation PID
+	private SimplePID m_RotatePID = new SimplePID(0.02, 0.0001, 0, 0, 1000);	// rotation PID
 	
 	public Test360Command() {
 		requires(Robot.kGyroSubsystem);

@@ -33,12 +33,11 @@ import org.usfirst.frc.team6026.robot.subsystems.RangeFinder;
  * project.
  */
 public class Robot extends TimedRobot {
-	
-	public static final Command teleopDrive = new TeleOpDrive();
-	//public static final ExampleSubsystem kExampleSubsystem = new ExampleSubsystem();
 	public static final DriveTrain kDriveTrainSubsystem = new DriveTrain();
 	public static final Gyro kGyroSubsystem = new Gyro();
 	public static final RangeFinder kRangeFinderSubsystem = new RangeFinder();
+	
+	public static final Command teleopDrive = new TeleOpDrive();
 	
 	public static OI m_oi;
 	public static String gameData;
@@ -55,7 +54,10 @@ public class Robot extends TimedRobot {
 		
 		// Get Game Data
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
-		if( gameData.charAt(0) == 'L') {
+		if( gameData.length() > 0 ) {
+			if( gameData.charAt(0) == 'L') {
+			
+			}
 		}
 		
 		m_oi = new OI();
@@ -102,14 +104,15 @@ public class Robot extends TimedRobot {
 		 * autonomousCommand = new ExampleCommand(); break; }
 		 */
 
+		if( teleopDrive != null ) {
+			teleopDrive.cancel();
+		}
+		
 		// schedule the autonomous command (example)
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.start();
 		}
-		
-		if( teleopDrive != null ) {
-			teleopDrive.cancel();
-		}
+
 	}
 
 	/**

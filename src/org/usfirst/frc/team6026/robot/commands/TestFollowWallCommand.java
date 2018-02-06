@@ -29,10 +29,12 @@ public class TestFollowWallCommand extends Command{
 		// TODO: Drive Forward Until Reach Target (Front Object < 500mm)
 		
 		// TODO: Maintain 500mm distance from wall (Left or Right based on GameData)
-		if( Robot.gameData.charAt(0) == 'L') {
-			// wall on left
-		}else {
-			// wall on right
+		if( Robot.gameData.length() > 0 ) {
+			if( Robot.gameData.charAt(0) == 'L') {
+				// wall on left
+			}else {
+				// wall on right
+			}
 		}
 		
 		Robot.kDriveTrainSubsystem.drive(forward,rotate);
@@ -48,7 +50,7 @@ public class TestFollowWallCommand extends Command{
 	
 	@Override
 	protected boolean isFinished() {
-		// TODO Auto-generated method stub
+		// TO DO Auto-generated method stub
 		return false;
 	}
 

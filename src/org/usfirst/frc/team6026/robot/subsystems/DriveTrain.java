@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrain extends Subsystem{
@@ -16,6 +17,7 @@ public class DriveTrain extends Subsystem{
 	private WPI_TalonSRX m_rightMotor;
 	double m_leftZeroPosition;
 	double m_rightZeroPosition;
+	private DifferentialDrive diffDrive;
 
 	
 	@Override
@@ -34,6 +36,11 @@ public class DriveTrain extends Subsystem{
 		// Setup Encoder
 		m_leftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 10);
 		m_rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 10);
+		
+		diffDrive = new DifferentialDrive(
+				m_leftMotor,
+				m_rightMotor
+			);
 		
 		zeroMotorPositions();
 	}
@@ -78,11 +85,28 @@ public class DriveTrain extends Subsystem{
 		m_rightMotor.set(ControlMode.PercentOutput,d);
 	}
 	
-	public void drive (double speed, double rotation) { 
+	
+	public void drive (double speed, double rotation) {
+		diffDrive.arcadeDrive(speed/1.5, rotation);
+		updateDashboard();
+	}
+	
+	public void drive2 (double speed, double rotation) { 
 		double d = 22;	// distance between L & R wheels
 		
-		driveLeftMotor(speed - ((d*rotation)/2));
-		driveRightMotor(speed + ((d*rotation)/2));
+		double left = speed - ((d*rotation)/2);
+		double right = speed + ((d*rotation)/2);
+		
+		SmartDashboard.putNumber("Left",left);
+		SmartDashboard.putNumber("Right", right);
+		
+		driveLeftMotor(left);
+		driveRightMotor(right);
+
+		//driveLeftMotor(0);
+		//driveRightMotor(0);
+		
+		updateDashboard();
 	}
 
 }
