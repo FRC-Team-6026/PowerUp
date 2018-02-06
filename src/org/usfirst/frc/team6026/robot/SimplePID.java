@@ -8,7 +8,7 @@ public class SimplePID {
 	double iMax, iMin;
 	double iGain, pGain, dGain;
 	
-	double update (double position, double target){ //im @ 3, headed to 5
+	public double update (double position, double target){ //im @ 3, headed to 5
 		double error = target - position;
 		double p = pGain * error;
 		
@@ -25,7 +25,7 @@ public class SimplePID {
 	}
 		
 		
-	SimplePID(double pG, double iG, double dG, double diMin, double diMax){
+	public SimplePID(double pG, double iG, double dG, double diMin, double diMax){
 		iState = iMin + (iMax - iMin/2);
 		pGain = pG;
 		iGain = iG;

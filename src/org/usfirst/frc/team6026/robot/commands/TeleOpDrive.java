@@ -3,22 +3,20 @@ package org.usfirst.frc.team6026.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 
 import org.usfirst.frc.team6026.robot.OI;
-import org.usfirst.frc.team6026.robot.subsystems.*;
+import org.usfirst.frc.team6026.robot.Robot;
 
 public class TeleOpDrive extends Command {
-	
-	public static DriveTrain driveTrain = new DriveTrain();
 
 	public TeleOpDrive() {
-		requires(driveTrain);
+		requires(Robot.kDriveTrainSubsystem);
 	}
 	
 	protected void initialize() {
-		driveTrain.zeroMotorPositions();
+		Robot.kDriveTrainSubsystem.zeroMotorPositions();
 	}
 	
 	protected void execute() {
-		driveTrain.drive(OI.joystick.getY()/1.5, (OI.joystick.getX())/1.5);
+		Robot.kDriveTrainSubsystem.drive(OI.driveJoystick.getY()/1.5, (OI.driveJoystick.getX())/1.5);
 	}
 	
 	protected void end() {
@@ -31,7 +29,9 @@ public class TeleOpDrive extends Command {
 	
 	@Override
 	protected boolean isFinished() {
-		// TODO Auto-generated method stub
+		// Set the default command for a subsystem here.
+		// setDefaultCommand(new MySpecialCommand());
+		
 		return false;
 	}
 

@@ -14,11 +14,16 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc.team6026.robot.commands.TestMoveCommand;
 import org.usfirst.frc.team6026.robot.commands.Test360Command;
 import org.usfirst.frc.team6026.robot.commands.TestFollowWallCommand;
 import org.usfirst.frc.team6026.robot.commands.TeleOpDrive;
-import org.usfirst.frc.team6026.robot.subsystems.ExampleSubsystem;
+
+import org.usfirst.frc.team6026.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team6026.robot.subsystems.Gyro;
+import org.usfirst.frc.team6026.robot.subsystems.RangeFinder;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -30,9 +35,13 @@ import org.usfirst.frc.team6026.robot.subsystems.ExampleSubsystem;
 public class Robot extends TimedRobot {
 	
 	public static final Command teleopDrive = new TeleOpDrive();
-	public static final ExampleSubsystem kExampleSubsystem = new ExampleSubsystem();
+	//public static final ExampleSubsystem kExampleSubsystem = new ExampleSubsystem();
+	public static final DriveTrain kDriveTrainSubsystem = new DriveTrain();
+	public static final Gyro kGyroSubsystem = new Gyro();
+	public static final RangeFinder kRangeFinderSubsystem = new RangeFinder();
+	
 	public static OI m_oi;
-	String gameData;
+	public static String gameData;
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -53,7 +62,6 @@ public class Robot extends TimedRobot {
 		m_chooser.addDefault("Auto 360", new Test360Command());
 		m_chooser.addObject("Auto Move", new TestMoveCommand());
 		m_chooser.addObject("Auto Follow Wall", new TestFollowWallCommand());
-		
 		SmartDashboard.putData("Auto Mode", m_chooser);
 	}
 

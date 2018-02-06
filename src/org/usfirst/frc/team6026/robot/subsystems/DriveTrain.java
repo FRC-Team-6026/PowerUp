@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrain extends Subsystem{
 
@@ -23,8 +24,8 @@ public class DriveTrain extends Subsystem{
 	}
 	
 	public DriveTrain() {
-		m_leftMotor = new WPI_TalonSRX(1);
-		m_rightMotor = new WPI_TalonSRX(2);
+		m_leftMotor = new WPI_TalonSRX(RobotMap.masterLeftMotor);
+		m_rightMotor = new WPI_TalonSRX(RobotMap.masterRightMotor);
 		
 		// 10ms Sample, 100ms Timeout
 		m_leftMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10, 100);
@@ -37,17 +38,36 @@ public class DriveTrain extends Subsystem{
 		zeroMotorPositions();
 	}
 	
+	public void updateDashboard() {
+		SmartDashboard.putNumber("LMotor Current (A)", m_leftMotor.getOutputCurrent());
+		SmartDashboard.putNumber("RMotor Current (A)", m_rightMotor.getOutputCurrent());
+		SmartDashboard.putNumber("LMotor Velocity",  m_leftMotor.getActiveTrajectoryVelocity());
+		SmartDashboard.putNumber("RMotor Velocity",  m_rightMotor.getActiveTrajectoryVelocity());
+		SmartDashboard.putNumber("LMotor Encoder", m_leftMotor.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("RMotor Encoder", 0-m_rightMotor.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("LMotor Encoder Abs", getLeftMotorPosition() );
+		SmartDashboard.putNumber("RMotor Encoder Abs", getRightMotorPosition() );
+	}
+	
 	public void zeroMotorPositions() {
 		m_leftZeroPosition = m_leftMotor.getSelectedSensorPosition(0);
 		m_rightZeroPosition = m_rightMotor.getSelectedSensorPosition(0);
 	}
 	
 	public double getLeftMotorPosition() {
-		return 0-(m_leftZeroPosition-m_leftMotor.getSelectedSensorPosition(0));
+		// Wheel Diameter 7.72" diameter => 24.25" Circumference
+		// Encoder yields 4096 pulses per revolution.
+		// 4096 counts = 24.25" of travel or 615.95mm
+		
+		double encoder =  0-(m_leftZeroPosition-m_leftMotor.getSelectedSensorPosition(0));
+		//return (encoder * (24.25 / 4096.0));	// inches
+		return (encoder * (615.95 / 4096.0));	// mm
 	}
 	
 	public double getRightMotorPosition() {
-		return m_rightZeroPosition-(m_rightMotor.getSelectedSensorPosition(0));
+		double encoder = m_rightZeroPosition-(m_rightMotor.getSelectedSensorPosition(0));
+		//return (encoder * (24.25 / 4096.0));	// inches
+		return (encoder * (615.95 / 4096.0));	// mm
 	}
 	
 	public void driveLeftMotor(double d) {

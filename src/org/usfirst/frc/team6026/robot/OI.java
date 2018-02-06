@@ -23,9 +23,10 @@ public class OI {
 	// number it is.
 	// Joystick stick = new Joystick(port);
 	// Button button = new JoystickButton(stick, buttonNumber);
-	public static Joystick joystick = new Joystick(0);
-	public static Button liftButton = new JoystickButton(joystick, 0);
+	public static Joystick driveJoystick = new Joystick(0);
+	//public static Joystick supportJoystick = new Joystick(1);
 	
+	public static Button liftButton = new JoystickButton(driveJoystick, 0);
 
 	// There are a few additional built in buttons you can use. Additionally,
 	// by subclassing Button you can create custom triggers and bind those to
