@@ -21,7 +21,9 @@ import org.usfirst.frc.team6026.robot.commands.TestFollowWallCommand;
 import org.usfirst.frc.team6026.robot.commands.TeleOpDrive;
 
 import org.usfirst.frc.team6026.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team6026.robot.subsystems.Gripper;
 import org.usfirst.frc.team6026.robot.subsystems.Gyro;
+import org.usfirst.frc.team6026.robot.subsystems.Lift;
 import org.usfirst.frc.team6026.robot.subsystems.RangeFinder;
 
 
@@ -36,6 +38,8 @@ public class Robot extends TimedRobot {
 	public static final DriveTrain kDriveTrainSubsystem = new DriveTrain();
 	public static final Gyro kGyroSubsystem = new Gyro();
 	public static final RangeFinder kRangeFinderSubsystem = new RangeFinder();
+	public static final Lift kLiftSubsystem = new Lift();
+	public static final Gripper kGripperSubsystem = new Gripper();
 	
 	public static final Command teleopDrive = new TeleOpDrive();
 	
