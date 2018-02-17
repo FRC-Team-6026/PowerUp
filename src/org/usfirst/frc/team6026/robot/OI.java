@@ -24,7 +24,7 @@ public class OI {
 	// Joystick stick = new Joystick(port);
 	// Button button = new JoystickButton(stick, buttonNumber);
 	public static Joystick driveJoystick = new Joystick(0);
-	//public static Joystick supportJoystick = new Joystick(1);
+	public static Joystick supportJoystick = new Joystick(1);
 	
 	public static Button liftButton = new JoystickButton(driveJoystick, 0);
 

@@ -33,7 +33,7 @@ public class Lift extends Subsystem{
 	}
 	
 	public void driveLiftMotor(double d) {
-		m_liftMotor.set(ControlMode.PercentOutput,0-d);
+		m_liftMotor.set(ControlMode.PercentOutput,-d);
 	}
 	
 	public double getLiftMotorPosition() {

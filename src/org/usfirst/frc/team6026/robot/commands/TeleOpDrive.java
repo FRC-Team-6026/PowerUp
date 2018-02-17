@@ -20,20 +20,16 @@ public class TeleOpDrive extends Command {
 	
 	protected void execute() {
 		double jY = OI.driveJoystick.getY();
-		double jX = OI.driveJoystick.getX();
+		double jX = OI.driveJoystick.getRawAxis(4);
+		double sY = OI.supportJoystick.getRawAxis(5);
 		
-		if( OI.driveJoystick.getRawButton(1)) {
-			Robot.kLiftSubsystem.driveLiftMotor(0.5);	// Down Bottom Limit
-		}else if( OI.driveJoystick.getRawButton(2)) {
-			Robot.kLiftSubsystem.driveLiftMotor(-0.5);	// Up (Top Limit)
-		}else{
-			Robot.kLiftSubsystem.driveLiftMotor(0);
-		}
 		
-		if( OI.driveJoystick.getRawAxis(3) > 0.1) {	// Eject
-			Robot.kGripperSubsystem.driveGripperMotor((OI.driveJoystick.getRawAxis(3)*2)-1);
-		}else if( OI.driveJoystick.getRawAxis(2) > 0.1) {	// Capture
-			Robot.kGripperSubsystem.driveGripperMotor(-(OI.driveJoystick.getRawAxis(2)*2)-1);
+		Robot.kLiftSubsystem.driveLiftMotor(sY/2);	// Drive lift up/down
+		
+		if( OI.supportJoystick.getRawAxis(3) > 0.1) {	// Eject
+			Robot.kGripperSubsystem.driveGripperMotor((OI.supportJoystick.getRawAxis(3)*2)-1);
+		}else if( OI.supportJoystick.getRawAxis(2) > 0.1) {	// Capture
+			Robot.kGripperSubsystem.driveGripperMotor(-(OI.supportJoystick.getRawAxis(2)*2)-1);
 		}else {
 			Robot.kGripperSubsystem.driveGripperMotor(0.0);
 		}
@@ -47,7 +43,16 @@ public class TeleOpDrive extends Command {
 		SmartDashboard.putNumber("JoyX", jX);
 		SmartDashboard.putNumber("JoyY", jY);
 		
-		Robot.kDriveTrainSubsystem.drive(-jY, jX);
+		double speed1 = OI.driveJoystick.getRawAxis(2);
+		double speed2 = OI.driveJoystick.getRawAxis(3);
+		
+		if(speed2 > 0.1) {
+			Robot.kDriveTrainSubsystem.drive(speed2, jX);
+		}else if(speed1 > 0.1) {
+			Robot.kDriveTrainSubsystem.drive(-speed1, jX);
+		}else {
+			Robot.kDriveTrainSubsystem.drive(0, jX);
+		}
 		
 		SmartDashboard.putNumber("Lift (mm)", Robot.kLiftSubsystem.getLiftMotorPosition());
 	}

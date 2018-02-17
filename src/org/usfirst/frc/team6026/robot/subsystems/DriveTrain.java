@@ -4,6 +4,7 @@ import org.usfirst.frc.team6026.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -32,6 +33,12 @@ public class DriveTrain extends Subsystem{
 		m_rightMotor = new WPI_TalonSRX(RobotMap.masterRightMotor);
 		m_leftSlaveMotor = new WPI_TalonSRX(RobotMap.slaveLeftMotor);
 		m_rightSlaveMotor = new WPI_TalonSRX(RobotMap.slaveRightMotor);
+		
+		// set neutral mode
+		m_leftMotor.setNeutralMode(NeutralMode.Coast);
+		m_rightMotor.setNeutralMode(NeutralMode.Coast);
+		m_leftSlaveMotor.setNeutralMode(NeutralMode.Coast);
+		m_rightSlaveMotor.setNeutralMode(NeutralMode.Coast);
 
 		// set up leftSlave/rightSlave in follower mode
 		m_leftSlaveMotor.set(ControlMode.Follower, RobotMap.masterLeftMotor);
