@@ -32,7 +32,7 @@ public class TestMoveCommand extends Command {
 		
 		// TODO: Use Gyro To Maintain Heading
 		
-		Robot.kDriveTrainSubsystem.drive(output,0);
+		Robot.kDriveTrainSubsystem.drive(output/4.0,0);
 	}
 	
 	protected void end() {

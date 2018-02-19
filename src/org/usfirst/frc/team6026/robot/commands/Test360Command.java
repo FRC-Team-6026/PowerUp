@@ -29,7 +29,7 @@ public class Test360Command extends Command {
 		double target = 360;
 		double output = m_RotatePID.update(position, target);
 		
-		Robot.kDriveTrainSubsystem.drive(0, output);
+		Robot.kDriveTrainSubsystem.drive(0, output/3);
 	}
 	
 	protected void end() {

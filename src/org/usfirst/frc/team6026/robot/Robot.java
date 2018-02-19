@@ -26,6 +26,7 @@ import org.usfirst.frc.team6026.robot.subsystems.Gyro;
 import org.usfirst.frc.team6026.robot.subsystems.Lift;
 import org.usfirst.frc.team6026.robot.subsystems.RangeFinder;
 
+import edu.wpi.first.wpilibj.CameraServer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -69,6 +70,8 @@ public class Robot extends TimedRobot {
 		m_chooser.addObject("Auto Move", new TestMoveCommand());
 		m_chooser.addObject("Auto Follow Wall", new TestFollowWallCommand());
 		SmartDashboard.putData("Auto Mode", m_chooser);
+		
+		CameraServer.getInstance().startAutomaticCapture();
 	}
 
 	/**

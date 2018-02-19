@@ -26,10 +26,12 @@ public class TeleOpDrive extends Command {
 		
 		Robot.kLiftSubsystem.driveLiftMotor(sY/2);	// Drive lift up/down
 		
-		if( OI.supportJoystick.getRawAxis(3) > 0.1) {	// Eject
-			Robot.kGripperSubsystem.driveGripperMotor((OI.supportJoystick.getRawAxis(3)*2)-1);
-		}else if( OI.supportJoystick.getRawAxis(2) > 0.1) {	// Capture
-			Robot.kGripperSubsystem.driveGripperMotor(-(OI.supportJoystick.getRawAxis(2)*2)-1);
+		if( OI.supportJoystick.getRawAxis(3) > 0.01) {	// Capture
+			Robot.kGripperSubsystem.driveGripperMotor(((OI.supportJoystick.getRawAxis(3)/2)+0.5));
+		}else if( OI.supportJoystick.getRawAxis(2) > 0.01) {	// Eject
+			Robot.kGripperSubsystem.driveGripperMotor(-((OI.supportJoystick.getRawAxis(2)/2)+0.5));
+		}else if( OI.supportJoystick.getRawButton(5)) {	// Slow Eject
+			Robot.kGripperSubsystem.driveGripperMotor(-0.25);
 		}else {
 			Robot.kGripperSubsystem.driveGripperMotor(0.0);
 		}
