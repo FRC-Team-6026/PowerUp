@@ -5,11 +5,12 @@ import org.usfirst.frc.team6026.robot.Robot;
 import org.usfirst.frc.team6026.robot.SimplePID;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Test360Command extends Command {
 
-	//private SimplePID m_RotatePID = new SimplePID(0.003, 0.0003, 0, 0, 0.1);  // best so far
-	private SimplePID m_RotatePID = new SimplePID(0.02, 0.0001, 0, 0, 1000);	// rotation PID
+	//private SimplePID m_RotatePID = new SimplePID(0.02, 0.0006, 0, -10000, 10000);  // Best so far
+	private SimplePID m_RotatePID = new SimplePID(0.035, 0.001, 0, -1000, 1000);	// rotation PID
 	
 	public Test360Command() {
 		requires(Robot.kGyroSubsystem);
@@ -18,18 +19,25 @@ public class Test360Command extends Command {
 	
 	protected void initialize() {
 		Robot.kGyroSubsystem.gyro.reset();
+		Robot.kGyroSubsystem.gyro.calibrate();
 		Robot.kDriveTrainSubsystem.zeroMotorPositions();
+		Robot.kDriveTrainSubsystem.useBrakes(false);
 	}
 	
 	protected void execute() {
-		Robot.kDriveTrainSubsystem.drive(OI.driveJoystick.getY()/1.5, (OI.driveJoystick.getX())/1.5);
-		
-		// Rotate 360
+
+		// Rotate
 		double position = Robot.kGyroSubsystem.gyro.getAngle();
-		double target = 360;
+		double target = 45;
 		double output = m_RotatePID.update(position, target);
+
+		Robot.kDriveTrainSubsystem.updateDashboard();
+		Robot.kGyroSubsystem.updateDashboard();
 		
-		Robot.kDriveTrainSubsystem.drive(0, output/3);
+		SmartDashboard.putNumber("Rot Pos", position);
+		SmartDashboard.putNumber("Rot Out", output);
+		
+		Robot.kDriveTrainSubsystem.drive(0, output);
 	}
 	
 	protected void end() {

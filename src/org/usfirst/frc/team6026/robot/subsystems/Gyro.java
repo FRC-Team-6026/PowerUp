@@ -12,6 +12,7 @@ public class Gyro extends Subsystem{
 	
 	public Gyro() {
 		gyro.reset();
+		gyro.calibrate();
 	}
 	
 	public void updateDashboard() {

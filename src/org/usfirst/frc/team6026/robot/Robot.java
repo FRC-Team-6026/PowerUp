@@ -66,7 +66,7 @@ public class Robot extends TimedRobot {
 		}
 		
 		m_oi = new OI();
-		m_chooser.addDefault("Auto 360", new Test360Command());
+		m_chooser.addDefault("Auto Rotate", new Test360Command());
 		m_chooser.addObject("Auto Move", new TestMoveCommand());
 		m_chooser.addObject("Auto Follow Wall", new TestFollowWallCommand());
 		SmartDashboard.putData("Auto Mode", m_chooser);
@@ -102,14 +102,24 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		m_autonomousCommand = m_chooser.getSelected();
 
-		/*
-		 * String autoSelected = SmartDashboard.getString("Auto Selector",
-		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-		 * = new MyAutoCommand(); break; case "Default Auto": default:
-		 * autonomousCommand = new ExampleCommand(); break; }
-		 */
+        String gameData = DriverStation.getInstance().getGameSpecificMessage();
+        if (gameData==null) { gameData = ""; }
+        int retries = 100;
+        while (gameData.length() < 2 && retries > 0) {
+            DriverStation.reportError("Gamedata is " + gameData + " retrying " + retries, false);
+            try {
+                Thread.sleep(5);
+                gameData = DriverStation.getInstance().getGameSpecificMessage();
+                if (gameData==null) { gameData = ""; }
+            } catch (Exception e) {
+            }
+            retries--;
+        }
+        SmartDashboard.putString("Auto/gameData", gameData);
+        DriverStation.reportError("gameData before parse: " + gameData, false);
+		
+		m_autonomousCommand = m_chooser.getSelected();
 
 		if( teleopDrive != null ) {
 			teleopDrive.cancel();

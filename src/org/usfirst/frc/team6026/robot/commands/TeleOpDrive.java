@@ -16,6 +16,7 @@ public class TeleOpDrive extends Command {
 	
 	protected void initialize() {
 		Robot.kDriveTrainSubsystem.zeroMotorPositions();
+		Robot.kDriveTrainSubsystem.useBrakes(false);
 	}
 	
 	protected void execute() {
@@ -26,13 +27,11 @@ public class TeleOpDrive extends Command {
 		double rR = Robot.kRangeFinderSubsystem.getRightRange();
 		double lTrigger = OI.driveJoystick.getRawAxis(2);
 		double rTrigger = OI.driveJoystick.getRawAxis(3);
-		
-		SmartDashboard.putNumber("JoyX", jX);
-		SmartDashboard.putNumber("JoyY", jY);
+				
+		Robot.kDriveTrainSubsystem.updateDashboard();
 		
 		// Lift
 		Robot.kLiftSubsystem.driveLiftMotor(sY/2);
-		SmartDashboard.putNumber("sY: ", sY);
 		
 		// Gripper
 		if( OI.supportJoystick.getRawAxis(3) > 0.01) {	// Capture

@@ -15,9 +15,9 @@ package org.usfirst.frc.team6026.robot;
  */
 public class RobotMap {
 
-	public static int rangefinderLeftPort = 1;
+	public static int rangefinderFrontPort = 1;
 	public static int rangefinderRightPort = 2;
-	public static int rangefinderFrontPort = 3;
+	public static int rangefinderLeftPort = 3;
 	
 	public static int masterLeftMotor = 1;
 	public static int masterRightMotor = 2;

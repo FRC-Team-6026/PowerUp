@@ -8,6 +8,18 @@ public class SimplePID {
 	double iMax, iMin;
 	double iGain, pGain, dGain;
 	
+	public void display(double p, double i, double d, double is, double ds, double err) {
+		SmartDashboard.putNumber("p", p);
+		SmartDashboard.putNumber("i", i);
+		SmartDashboard.putNumber("d", d);
+		SmartDashboard.putNumber("is", is);
+		SmartDashboard.putNumber("ds",  ds);
+		SmartDashboard.putNumber("e", err);
+		
+		double outs[] = {p,i,d,is,ds,err};
+		SmartDashboard.putNumberArray("pid", outs);
+	}
+	
 	public double update (double position, double target){ //im @ 3, headed to 5
 		double error = target - position;
 		double p = pGain * error;
@@ -19,8 +31,7 @@ public class SimplePID {
 		double d = dGain * (dState - position);
 		dState = position;
 		
-		SmartDashboard.putNumber("iState", iState);
-		SmartDashboard.putNumber("pidOut",  p+i+d);
+		display(p, i, d, iState, dState, error);
 		return (p+i+d);
 	}
 		

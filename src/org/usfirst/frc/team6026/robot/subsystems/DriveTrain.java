@@ -27,18 +27,39 @@ public class DriveTrain extends Subsystem{
 	protected void initDefaultCommand() {
 		// TODO Auto-generated method stub
 	}
+
+	public void useBrakes(Boolean b) {
+		NeutralMode n = NeutralMode.Brake;
+		
+		if( b ) {
+			n = NeutralMode.Brake;
+		}else {
+			n = NeutralMode.Coast;
+		}
+			
+		m_leftMotor.setNeutralMode(n);
+		m_rightMotor.setNeutralMode(n);
+		m_leftSlaveMotor.setNeutralMode(n);
+		m_rightSlaveMotor.setNeutralMode(n);
+	}
 	
 	public DriveTrain() {
 		m_leftMotor = new WPI_TalonSRX(RobotMap.masterLeftMotor);
 		m_rightMotor = new WPI_TalonSRX(RobotMap.masterRightMotor);
 		m_leftSlaveMotor = new WPI_TalonSRX(RobotMap.slaveLeftMotor);
 		m_rightSlaveMotor = new WPI_TalonSRX(RobotMap.slaveRightMotor);
+
+		// Limit Current
+		m_leftMotor.configContinuousCurrentLimit(20, 10);
+		m_rightMotor.configContinuousCurrentLimit(20, 10);
+		m_leftSlaveMotor.configContinuousCurrentLimit(20, 10);
+		m_rightSlaveMotor.configContinuousCurrentLimit(20, 10);
+		m_leftMotor.enableCurrentLimit(true);
+		m_rightMotor.enableCurrentLimit(true);
+		m_leftSlaveMotor.enableCurrentLimit(true);
+		m_rightSlaveMotor.enableCurrentLimit(true);
 		
-		// set neutral mode
-		m_leftMotor.setNeutralMode(NeutralMode.Coast);
-		m_rightMotor.setNeutralMode(NeutralMode.Coast);
-		m_leftSlaveMotor.setNeutralMode(NeutralMode.Coast);
-		m_rightSlaveMotor.setNeutralMode(NeutralMode.Coast);
+		useBrakes(true);
 
 		// set up leftSlave/rightSlave in follower mode
 		m_leftSlaveMotor.set(ControlMode.Follower, RobotMap.masterLeftMotor);
@@ -66,7 +87,7 @@ public class DriveTrain extends Subsystem{
 		SmartDashboard.putNumber("LMotor Velocity",  m_leftMotor.getActiveTrajectoryVelocity());
 		SmartDashboard.putNumber("RMotor Velocity",  m_rightMotor.getActiveTrajectoryVelocity());
 		SmartDashboard.putNumber("LMotor Encoder", m_leftMotor.getSelectedSensorVelocity(0));
-		SmartDashboard.putNumber("RMotor Encoder", 0-m_rightMotor.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("RMotor Encoder", m_rightMotor.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("LMotor Encoder Abs", getLeftMotorPosition() );
 		SmartDashboard.putNumber("RMotor Encoder Abs", getRightMotorPosition() );
 	}
@@ -103,7 +124,6 @@ public class DriveTrain extends Subsystem{
 	
 	public void drive (double speed, double rotation) {
 		diffDrive.arcadeDrive(speed/1.5, rotation);
-		updateDashboard();
 	}
 	
 	public void drive2 (double speed, double rotation) { 
@@ -111,16 +131,10 @@ public class DriveTrain extends Subsystem{
 		
 		double left = speed - ((d*rotation)/2);
 		double right = speed + ((d*rotation)/2);
-		
-		SmartDashboard.putNumber("Left",left);
-		SmartDashboard.putNumber("Right", right);
-		
+				
 		driveLeftMotor(left);
 		driveRightMotor(right);
 
-		//driveLeftMotor(0);
-		//driveRightMotor(0);
-		
 		updateDashboard();
 	}
 
