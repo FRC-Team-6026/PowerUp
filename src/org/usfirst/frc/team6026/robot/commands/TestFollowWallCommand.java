@@ -51,7 +51,7 @@ public class TestFollowWallCommand extends Command{
 		SmartDashboard.putNumber("position", position);
 		SmartDashboard.putNumber("output", output);
 		Robot.kDriveTrainSubsystem.drive(output/1.5,0);
-		return (target-position);
+		return Math.abs(target-position);
 	}
 	
 	private double rotate(double target) {
@@ -62,7 +62,17 @@ public class TestFollowWallCommand extends Command{
 		SmartDashboard.putNumber("position", position);
 		SmartDashboard.putNumber("output", output);
 		Robot.kDriveTrainSubsystem.drive(0, output);
-		return (target-position);
+		return Math.abs(target-position);
+	}
+	
+	private double approach(double target) {
+		double position = Robot.kRangeFinderSubsystem.getFrontRange();
+		double output = m_MovePID.update(position, target);
+		SmartDashboard.putNumber("target", target);
+		SmartDashboard.putNumber("position", position);
+		SmartDashboard.putNumber("output", output);
+		Robot.kDriveTrainSubsystem.drive(output/1.5,0);
+		return Math.abs(target-position);	
 	}
 	
 	protected void execute() {
@@ -73,7 +83,7 @@ public class TestFollowWallCommand extends Command{
 		switch( moveState ) {
 		case 0:
 			// Move 500mm
-			if( Math.abs(move(500)) < 150 ) {
+			if( (move(500)) < 150 ) {
 				moveState = 1;
 				SmartDashboard.putNumber("AutoState", moveState);
 				Robot.kDriveTrainSubsystem.zeroMotorPositions();
@@ -81,7 +91,8 @@ public class TestFollowWallCommand extends Command{
 			}
 			break;
 		case 1:
-			if( Math.abs(rotate(45)) < 2 ) {
+			// TODO: this should be 45 for right hand switch, and -45 for left hand switch
+			if( (rotate(45)) < 2 ) {
 				moveState = 2;
 				SmartDashboard.putNumber("AutoState", moveState);
 				Robot.kDriveTrainSubsystem.zeroMotorPositions();
@@ -90,7 +101,7 @@ public class TestFollowWallCommand extends Command{
 			break;
 		case 2:
 			// Move 500mm
-			if( Math.abs(move(500)) < 150 ) {
+			if( (move(500)) < 150 ) {
 				moveState = 3;
 				SmartDashboard.putNumber("AutoState", moveState);
 				Robot.kDriveTrainSubsystem.zeroMotorPositions();
@@ -99,7 +110,7 @@ public class TestFollowWallCommand extends Command{
 			break;
 		case 3:
 			// Rotate
-			if( Math.abs(rotate(0)) < 2 ) {
+			if( (rotate(0)) < 2 ) {
 				moveState = 4;
 				Robot.kDriveTrainSubsystem.drive(0, 0);
 				SmartDashboard.putNumber("AutoState", moveState);
@@ -109,7 +120,7 @@ public class TestFollowWallCommand extends Command{
 			break;
 		case 4:
 			// Move 500mm
-			if( Math.abs(move(500)) < 150 ) {
+			if( (approach(50)) < 100 ) {
 				moveState = 5;
 				Robot.kDriveTrainSubsystem.drive(0, 0);
 				SmartDashboard.putNumber("AutoState", moveState);

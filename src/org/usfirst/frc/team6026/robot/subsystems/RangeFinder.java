@@ -4,12 +4,17 @@ import org.usfirst.frc.team6026.robot.RobotMap;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 
 public class RangeFinder extends Subsystem{
 
 	private AnalogInput leftRangeSensor = new AnalogInput(RobotMap.rangefinderLeftPort);
 	private AnalogInput rightRangeSensor = new AnalogInput(RobotMap.rangefinderRightPort);
 	private AnalogInput frontRangeSensor = new AnalogInput(RobotMap.rangefinderFrontPort);
+	
+	private DigitalOutput leftRangeEnable = new DigitalOutput(RobotMap.rangefinderLeftPort);
+	private DigitalOutput rightRangeEnable = new DigitalOutput(RobotMap.rangefinderRightPort);
+	private DigitalOutput frontRangeEnable = new DigitalOutput(RobotMap.rangefinderFrontPort);
 	
 	public RangeFinder() {
 		
@@ -21,7 +26,28 @@ public class RangeFinder extends Subsystem{
 		SmartDashboard.putNumber("Front Range(mm)", 0);
 	}
 	
+	public void rangeSelect(int n) {
+		switch(n) {
+		case 1:	// Front
+			leftRangeEnable.set(false);
+			rightRangeEnable.set(false);
+			frontRangeEnable.set(true);
+			break;
+		case 2:	// Right
+			leftRangeEnable.set(false);
+			rightRangeEnable.set(true);
+			frontRangeEnable.set(false);
+			break;
+		case 3:	// Left
+			leftRangeEnable.set(true);
+			rightRangeEnable.set(false);
+			frontRangeEnable.set(false);
+			break;
+		}
+	}
+	
 	public double getLeftRange() {
+		rangeSelect(3);
 		double volts = leftRangeSensor.getVoltage();
 		double range = 5.0 * (volts/0.004883);
 		SmartDashboard.putNumber("Left Range(mm)", range);
@@ -29,6 +55,7 @@ public class RangeFinder extends Subsystem{
 	}
 	
 	public double getRightRange() {
+		rangeSelect(2);
 		double volts = rightRangeSensor.getVoltage();
 		double range = 5.0 * (volts/0.004883);
 		SmartDashboard.putNumber("Right Range(mm)", range);
@@ -36,6 +63,7 @@ public class RangeFinder extends Subsystem{
 	}
 	
 	public double getFrontRange() {
+		rangeSelect(0);
 		double volts = frontRangeSensor.getVoltage();
 		double range = 5.0 * (volts/0.004883);
 		SmartDashboard.putNumber("Front Range(mm)", range);
