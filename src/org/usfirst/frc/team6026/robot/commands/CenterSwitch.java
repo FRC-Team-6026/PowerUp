@@ -9,18 +9,18 @@ import edu.wpi.first.wpilibj.Timer;
 
 import java.lang.Math;
 
-public class TestFollowWallCommand extends Command{
+public class CenterSwitch extends Command{
 
 	private SimplePID m_RotatePID = new SimplePID(0.035, 0.001, 0, -1000, 1000);	// rotation PID
 	private SimplePID m_MovePID = new SimplePID(0.003, 0.001, 0, -1000, 1000);	// move PID
 	
 	private int moveState = 0;
+	private Timer stateTimer = new Timer();
 	
-	public TestFollowWallCommand() {
+	public CenterSwitch() {
 		requires(Robot.kGyroSubsystem);
 		requires(Robot.kDriveTrainSubsystem);
 		requires(Robot.kRangeFinderSubsystem);
-		Robot.kDriveTrainSubsystem.useBrakes(true);
 	}
 	
 	protected void initialize() {
@@ -39,8 +39,9 @@ public class TestFollowWallCommand extends Command{
 		final char middleScale = Robot.gameData.length() > 1 ? Robot.gameData.charAt(1) : '?';
 		final char remoteSwitch = Robot.gameData.length() > 2 ? Robot.gameData.charAt(2) : '?';
 	
-		moveState = 0;
+		moveState = -3;
 		SmartDashboard.putNumber("AutoState", moveState);
+		
 	}
 	
 	private double move(double target) {
@@ -77,14 +78,38 @@ public class TestFollowWallCommand extends Command{
 	
 	protected void execute() {
 		
+		SmartDashboard.putNumber("AutoState", moveState);
 		Robot.kDriveTrainSubsystem.updateDashboard();
 		Robot.kGyroSubsystem.updateDashboard();
 		
 		switch( moveState ) {
+		case -3:
+			// Start
+			stateTimer.reset();
+			stateTimer.start();
+			Robot.kDriveTrainSubsystem.drive(0, 0);
+			moveState++;
+		case -2:
+			// Lift
+			if( stateTimer.get() > (3 * 1000000) ) {
+				moveState++;
+			}
+			Robot.kDriveTrainSubsystem.drive(0, 0);
+			Robot.kLiftSubsystem.driveLiftMotor(-0.35);
+		case -1:
+			// Release
+			if( stateTimer.get() > (1 * 1000000) ) {
+				moveState++;
+				Robot.kDriveTrainSubsystem.drive(0, 0);
+				Robot.kLiftSubsystem.driveLiftMotor(0);
+				moveState=10;
+			}
+			Robot.kDriveTrainSubsystem.drive(0, 0);
+			Robot.kLiftSubsystem.driveLiftMotor(0.35);
 		case 0:
 			// Move 500mm
 			if( (move(500)) < 150 ) {
-				moveState = 1;
+				moveState++;
 				SmartDashboard.putNumber("AutoState", moveState);
 				Robot.kDriveTrainSubsystem.zeroMotorPositions();
 				Timer.delay(1.0);				
@@ -93,7 +118,7 @@ public class TestFollowWallCommand extends Command{
 		case 1:
 			// TODO: this should be 45 for right hand switch, and -45 for left hand switch
 			if( (rotate(45)) < 2 ) {
-				moveState = 2;
+				moveState++;
 				SmartDashboard.putNumber("AutoState", moveState);
 				Robot.kDriveTrainSubsystem.zeroMotorPositions();
 				Timer.delay(1.0);
@@ -102,7 +127,7 @@ public class TestFollowWallCommand extends Command{
 		case 2:
 			// Move 500mm
 			if( (move(500)) < 150 ) {
-				moveState = 3;
+				moveState++;
 				SmartDashboard.putNumber("AutoState", moveState);
 				Robot.kDriveTrainSubsystem.zeroMotorPositions();
 				Timer.delay(1.0);
@@ -111,7 +136,7 @@ public class TestFollowWallCommand extends Command{
 		case 3:
 			// Rotate
 			if( (rotate(0)) < 2 ) {
-				moveState = 4;
+				moveState++;
 				Robot.kDriveTrainSubsystem.drive(0, 0);
 				SmartDashboard.putNumber("AutoState", moveState);
 				Robot.kDriveTrainSubsystem.zeroMotorPositions();
@@ -120,8 +145,8 @@ public class TestFollowWallCommand extends Command{
 			break;
 		case 4:
 			// Move 500mm
-			if( (approach(50)) < 100 ) {
-				moveState = 5;
+			if( (move(500)) < 150 ) {
+				moveState++;
 				Robot.kDriveTrainSubsystem.drive(0, 0);
 				SmartDashboard.putNumber("AutoState", moveState);
 				Robot.kDriveTrainSubsystem.zeroMotorPositions();

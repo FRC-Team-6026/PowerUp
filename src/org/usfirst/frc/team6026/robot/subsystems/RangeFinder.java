@@ -28,17 +28,18 @@ public class RangeFinder extends Subsystem{
 	
 	public void rangeSelect(int n) {
 		switch(n) {
-		case 1:	// Front
+		default:
+		case 0:	// Front
 			leftRangeEnable.set(false);
 			rightRangeEnable.set(false);
 			frontRangeEnable.set(true);
 			break;
-		case 2:	// Right
+		case 1:	// Right
 			leftRangeEnable.set(false);
 			rightRangeEnable.set(true);
 			frontRangeEnable.set(false);
 			break;
-		case 3:	// Left
+		case 2:	// Left
 			leftRangeEnable.set(true);
 			rightRangeEnable.set(false);
 			frontRangeEnable.set(false);
@@ -47,7 +48,7 @@ public class RangeFinder extends Subsystem{
 	}
 	
 	public double getLeftRange() {
-		rangeSelect(3);
+		rangeSelect(2);
 		double volts = leftRangeSensor.getVoltage();
 		double range = 5.0 * (volts/0.004883);
 		SmartDashboard.putNumber("Left Range(mm)", range);
@@ -55,7 +56,7 @@ public class RangeFinder extends Subsystem{
 	}
 	
 	public double getRightRange() {
-		rangeSelect(2);
+		rangeSelect(1);
 		double volts = rightRangeSensor.getVoltage();
 		double range = 5.0 * (volts/0.004883);
 		SmartDashboard.putNumber("Right Range(mm)", range);

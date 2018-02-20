@@ -12,6 +12,7 @@ public class TeleOpDrive extends Command {
 		requires(Robot.kLiftSubsystem);
 		requires(Robot.kDriveTrainSubsystem);
 		requires(Robot.kGripperSubsystem);
+		requires(Robot.kRangeFinderSubsystem);
 	}
 	
 	protected void initialize() {
@@ -23,11 +24,12 @@ public class TeleOpDrive extends Command {
 		double jY = OI.driveJoystick.getY();
 		double jX = OI.driveJoystick.getRawAxis(4);
 		double sY = OI.supportJoystick.getRawAxis(5);
-		double rL = Robot.kRangeFinderSubsystem.getLeftRange();
+		//double rF = Robot.kRangeFinderSubsystem.getFrontRange();
 		double rR = Robot.kRangeFinderSubsystem.getRightRange();
+		//double rL = Robot.kRangeFinderSubsystem.getLeftRange();
 		double lTrigger = OI.driveJoystick.getRawAxis(2);
 		double rTrigger = OI.driveJoystick.getRawAxis(3);
-				
+		
 		Robot.kDriveTrainSubsystem.updateDashboard();
 		
 		// Lift

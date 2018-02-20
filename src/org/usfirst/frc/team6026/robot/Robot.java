@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team6026.robot.commands.TestMoveCommand;
 import org.usfirst.frc.team6026.robot.commands.Test360Command;
-import org.usfirst.frc.team6026.robot.commands.TestFollowWallCommand;
+import org.usfirst.frc.team6026.robot.commands.CenterSwitch;
 import org.usfirst.frc.team6026.robot.commands.TeleOpDrive;
 
 import org.usfirst.frc.team6026.robot.subsystems.DriveTrain;
@@ -68,7 +68,7 @@ public class Robot extends TimedRobot {
 		m_oi = new OI();
 		m_chooser.addDefault("Auto Rotate", new Test360Command());
 		m_chooser.addObject("Auto Move", new TestMoveCommand());
-		m_chooser.addObject("Auto Follow Wall", new TestFollowWallCommand());
+		m_chooser.addObject("Auto Follow Wall", new CenterSwitch());
 		SmartDashboard.putData("Auto Mode", m_chooser);
 		
 		CameraServer.getInstance().startAutomaticCapture();
@@ -102,7 +102,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-
+		/*
         String gameData = DriverStation.getInstance().getGameSpecificMessage();
         if (gameData==null) { gameData = ""; }
         int retries = 100;
@@ -118,7 +118,7 @@ public class Robot extends TimedRobot {
         }
         SmartDashboard.putString("Auto/gameData", gameData);
         DriverStation.reportError("gameData before parse: " + gameData, false);
-		
+		*/
 		m_autonomousCommand = m_chooser.getSelected();
 
 		if( teleopDrive != null ) {
