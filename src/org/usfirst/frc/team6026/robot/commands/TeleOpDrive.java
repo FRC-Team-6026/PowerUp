@@ -17,7 +17,8 @@ public class TeleOpDrive extends Command {
 	
 	protected void initialize() {
 		Robot.kDriveTrainSubsystem.zeroMotorPositions();
-		Robot.kDriveTrainSubsystem.useBrakes(false);
+		//Robot.kDriveTrainSubsystem.useBrakes(false);
+		Robot.kDriveTrainSubsystem.setRamp(0);
 	}
 	
 	protected void execute() {
@@ -31,6 +32,9 @@ public class TeleOpDrive extends Command {
 		double rTrigger = OI.driveJoystick.getRawAxis(3);
 		
 		Robot.kDriveTrainSubsystem.updateDashboard();
+		
+		double position = Robot.kGyroSubsystem.gyro.getAngle();
+		SmartDashboard.putNumber("Rot Pos", position);
 		
 		// Lift
 		Robot.kLiftSubsystem.driveLiftMotor(sY/2);

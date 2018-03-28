@@ -43,6 +43,11 @@ public class DriveTrain extends Subsystem{
 		m_rightSlaveMotor.setNeutralMode(n);
 	}
 	
+	public void setRamp(double fSeconds) {
+		m_leftMotor.configOpenloopRamp(fSeconds, 0);
+		m_rightMotor.configOpenloopRamp(fSeconds, 0);
+	}
+	
 	public DriveTrain() {
 		m_leftMotor = new WPI_TalonSRX(RobotMap.masterLeftMotor);
 		m_rightMotor = new WPI_TalonSRX(RobotMap.masterRightMotor);
@@ -50,17 +55,30 @@ public class DriveTrain extends Subsystem{
 		m_rightSlaveMotor = new WPI_TalonSRX(RobotMap.slaveRightMotor);
 
 		// Limit Current
-		m_leftMotor.configContinuousCurrentLimit(20, 10);
-		m_rightMotor.configContinuousCurrentLimit(20, 10);
-		m_leftSlaveMotor.configContinuousCurrentLimit(20, 10);
-		m_rightSlaveMotor.configContinuousCurrentLimit(20, 10);
+		
+		m_leftMotor.configContinuousCurrentLimit(15, 0);
+		m_rightMotor.configContinuousCurrentLimit(15, 0);
+		//m_leftSlaveMotor.configContinuousCurrentLimit(20, 10);
+		//m_rightSlaveMotor.configContinuousCurrentLimit(20, 10);
+
+		m_leftMotor.configPeakCurrentLimit(20, 0);
+		m_rightMotor.configPeakCurrentLimit(20, 0);
+		//m_leftSlaveMotor.configPeakCurrentLimit(0, 10);
+		//m_rightSlaveMotor.configPeakCurrentLimit(0, 10);
+		
+		m_leftMotor.configPeakCurrentDuration(100, 0);
+		m_rightMotor.configPeakCurrentDuration(100, 0);
+		
 		m_leftMotor.enableCurrentLimit(true);
 		m_rightMotor.enableCurrentLimit(true);
-		m_leftSlaveMotor.enableCurrentLimit(true);
-		m_rightSlaveMotor.enableCurrentLimit(true);
-		
+		//m_leftSlaveMotor.enableCurrentLimit(true);
+		//m_rightSlaveMotor.enableCurrentLimit(true);
+				
 		useBrakes(true);
 
+		m_leftMotor.configOpenloopRamp(1, 0);
+		m_rightMotor.configOpenloopRamp(1, 0);
+		
 		// set up leftSlave/rightSlave in follower mode
 		m_leftSlaveMotor.set(ControlMode.Follower, RobotMap.masterLeftMotor);
 		m_rightSlaveMotor.set(ControlMode.Follower, RobotMap.masterRightMotor);

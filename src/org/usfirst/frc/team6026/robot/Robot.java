@@ -18,6 +18,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team6026.robot.commands.TestMoveCommand;
 import org.usfirst.frc.team6026.robot.commands.Test360Command;
 import org.usfirst.frc.team6026.robot.commands.CenterSwitch;
+import org.usfirst.frc.team6026.robot.commands.CenterTossSwitch;
+import org.usfirst.frc.team6026.robot.commands.LeftSideSwitch;
+import org.usfirst.frc.team6026.robot.commands.RightSideSwitch;
 import org.usfirst.frc.team6026.robot.commands.TeleOpDrive;
 
 import org.usfirst.frc.team6026.robot.subsystems.DriveTrain;
@@ -66,9 +69,13 @@ public class Robot extends TimedRobot {
 		}
 		
 		m_oi = new OI();
-		m_chooser.addDefault("Auto Rotate", new Test360Command());
-		m_chooser.addObject("Auto Move", new TestMoveCommand());
-		m_chooser.addObject("Auto Follow Wall", new CenterSwitch());
+		//m_chooser.addDefault("Auto Rotate", new Test360Command());
+		//m_chooser.addObject("Auto Move", new TestMoveCommand());
+		m_chooser.addObject("Center Switch", new CenterSwitch());
+		m_chooser.addObject("Center Switch Toss", new CenterTossSwitch());
+		m_chooser.addObject("Left Side Switch", new LeftSideSwitch());
+		m_chooser.addObject("Right Side Switch", new RightSideSwitch());
+		
 		SmartDashboard.putData("Auto Mode", m_chooser);
 		
 		CameraServer.getInstance().startAutomaticCapture();

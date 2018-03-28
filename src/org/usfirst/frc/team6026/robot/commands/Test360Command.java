@@ -19,7 +19,6 @@ public class Test360Command extends Command {
 	
 	protected void initialize() {
 		Robot.kGyroSubsystem.gyro.reset();
-		Robot.kGyroSubsystem.gyro.calibrate();
 		Robot.kDriveTrainSubsystem.zeroMotorPositions();
 		Robot.kDriveTrainSubsystem.useBrakes(false);
 	}
@@ -28,7 +27,7 @@ public class Test360Command extends Command {
 
 		// Rotate
 		double position = Robot.kGyroSubsystem.gyro.getAngle();
-		double target = 45;
+		double target = -45;
 		double output = m_RotatePID.update(position, target);
 
 		Robot.kDriveTrainSubsystem.updateDashboard();

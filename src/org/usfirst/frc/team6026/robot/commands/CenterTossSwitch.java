@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 import java.lang.Math;
 
-public class CenterSwitch extends Command{
+public class CenterTossSwitch extends Command{
 
 	private SimplePID m_RotatePID = new SimplePID(0.035, 0.001, 0, -1000, 1000);	// rotation PID
 	private SimplePID m_MovePID = new SimplePID(0.003, 0.001, 0, -1000, 1000);	// move PID
@@ -20,7 +20,7 @@ public class CenterSwitch extends Command{
 	
 	private char localSwitch = '?';
 	
-	public CenterSwitch() {
+	public CenterTossSwitch() {
 		requires(Robot.kGyroSubsystem);
 		requires(Robot.kDriveTrainSubsystem);
 		requires(Robot.kRangeFinderSubsystem);
@@ -111,17 +111,34 @@ public class CenterSwitch extends Command{
 			Robot.kLiftSubsystem.driveLiftMotor(0.35);
 			break;
 		case 0:
-			// Move 500mm
-			if( (move(500)) < 150 ) {
+			// Move 1200mm
+			if( (move(1200)) < 150 ) {
 				moveState++;
 				SmartDashboard.putNumber("AutoState", moveState);
 				Robot.kDriveTrainSubsystem.zeroMotorPositions();
 				Robot.kGripperSubsystem.driveGripperMotor(0.5);
-				Timer.delay(0.25);		
+				Timer.delay(0.25);
+				stateTimer.reset();
 			}
 			break;
 		case 1:
-			// TODO: this should be 45 for right hand switch, and -45 for left hand switch
+			// Square on Wall
+			if( stateTimer.get() > 2.0 ) {
+				moveState++;
+			}
+			Robot.kDriveTrainSubsystem.drive(0.25, 0);
+			Robot.kLiftSubsystem.driveLiftMotor(-0.05);
+			break;
+		case 2:
+			// Back up a bit
+			if( stateTimer.get() > 2.0 ) {
+				moveState++;
+			}
+			Robot.kDriveTrainSubsystem.drive(-0.25, 0);
+			Robot.kLiftSubsystem.driveLiftMotor(-0.05);
+			break;
+		case 3:
+			// this should be 45 for right hand switch, and -45 for left hand switch
 			if( localSwitch == 'L' || localSwitch == 'l' ) {
 				if( (rotate(-60)) < 2 ) {
 					moveState++;
@@ -129,6 +146,7 @@ public class CenterSwitch extends Command{
 					Robot.kDriveTrainSubsystem.zeroMotorPositions();
 					Robot.kGripperSubsystem.driveGripperMotor(0.0);
 					Timer.delay(0.25);
+					stateTimer.reset();
 				}
 			}else {
 				if( (rotate(60)) < 2 ) {
@@ -137,75 +155,26 @@ public class CenterSwitch extends Command{
 					Robot.kDriveTrainSubsystem.zeroMotorPositions();
 					Robot.kGripperSubsystem.driveGripperMotor(0.0);
 					Timer.delay(0.25);
+					stateTimer.reset();
 				}	
-			}
-			
-			
-			break;
-		case 2:
-			// Move 500mm
-			if( (move(1000)) < 150 ) {
-				moveState++;
-				SmartDashboard.putNumber("AutoState", moveState);
-				Robot.kDriveTrainSubsystem.zeroMotorPositions();
-				Timer.delay(0.25);
-			}
-			break;
-		case 3:
-			// Rotate
-			if( localSwitch == 'L' || localSwitch == 'l' ) {
-				if( (rotate(-5)) < 2 ) {
-					moveState++;
-					Robot.kDriveTrainSubsystem.drive(0, 0);
-					SmartDashboard.putNumber("AutoState", moveState);
-					Robot.kDriveTrainSubsystem.zeroMotorPositions();
-					stateTimer.reset();
-				}
-			}else {
-				if( (rotate(5)) < 2 ) {
-					moveState++;
-					Robot.kDriveTrainSubsystem.drive(0, 0);
-					SmartDashboard.putNumber("AutoState", moveState);
-					Robot.kDriveTrainSubsystem.zeroMotorPositions();
-					stateTimer.reset();
-				}
 			}
 			break;
 		case 4:
 			// Lift Package
-			if( stateTimer.get() > 2.0 ) {
+			if( stateTimer.get() > 4.0 ) {
 				moveState++;
 			}
 			Robot.kDriveTrainSubsystem.drive(0, 0);
 			Robot.kLiftSubsystem.driveLiftMotor(-0.5);
 			break;
 		case 5:
-			// Move 500mm
-			if( (move(600)) < 150 ) {
-				moveState++;
-				Robot.kDriveTrainSubsystem.drive(0, 0);
-				SmartDashboard.putNumber("AutoState", moveState);
-				Robot.kDriveTrainSubsystem.zeroMotorPositions();
-				Robot.kLiftSubsystem.driveLiftMotor(-0.05);
-				stateTimer.reset();
-			}
-			break;
-		case 6:
-			// Square on Wall
-			if( stateTimer.get() > 2.0 ) {
-				moveState++;
-			}
-			Robot.kDriveTrainSubsystem.drive(0.25, 0);
-			Robot.kLiftSubsystem.driveLiftMotor(-0.05);
-			break;
-		case 7:
 			// Eject Package
-			if( stateTimer.get() > 4.0 ) {
+			if( stateTimer.get() > 2.0 ) {
 				moveState++;
 			}
 			Robot.kDriveTrainSubsystem.drive(0, 0);
 			Robot.kLiftSubsystem.driveLiftMotor(-0.05);
-			Robot.kGripperSubsystem.driveGripperMotor(-0.3);
+			Robot.kGripperSubsystem.driveGripperMotor(-1.0);
 			break;			
 		default:
 			Robot.kDriveTrainSubsystem.drive(0, 0);

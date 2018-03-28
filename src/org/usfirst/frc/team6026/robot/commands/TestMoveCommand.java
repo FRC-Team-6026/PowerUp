@@ -16,7 +16,6 @@ public class TestMoveCommand extends Command {
 	}
 	
 	protected void initialize() {
-		Robot.kGyroSubsystem.gyro.reset();
 		Robot.kDriveTrainSubsystem.zeroMotorPositions();
 		Robot.kDriveTrainSubsystem.useBrakes(true);
 	}
